@@ -6,11 +6,14 @@
 	    return view('welcome');
 	});
 
-	Route::get('/getPdf', function(){
-		$client = new HelloSign\Client('5d787d73dffc85b79b4fdf960fa36751dfa62da2662bdebb95a94854020e953a');
-		
-		$SignatureRequest = $client->getSignatureRequests();
-		$SignatureRequest = $SignatureRequest->toArray();
+	Route::get('/hs', function(){
+		$client = new HelloSign\Client('8797d3e57882596fd658bc8ce389c6bb1807adb9dfe20ed9512622363d4cb40b');
+		$account = new HelloSign\Account;
+		$account->setCallbackUrl('http://127.0.0.1:8000/callback');
+		$response = $client->updateAccount($account);
+		dd($response);
+		// $SignatureRequest = $client->getSignatureRequests();
+		// $SignatureRequest = $SignatureRequest->toArray();
 		// for ($i=0; $i < count($SignatureRequest); $i++) { 
 		// 	print_r($SignatureRequest[$i]['signatures']);	
 		// }
@@ -21,53 +24,19 @@
 			$client->getFiles($SignatureRequest[$i]['signature_request_id'], storage_path().'/hellosign/'.$SignatureRequest[$i]['title'].'.pdf');
 		}
 		dd('success');
-		
+		// $request = new HelloSign\SignatureRequest;
+		// $request->enableTestMode();
+		// $request->setTitle('Hello Sign Test');
+		// $request->setSubject('Sign request');
+		// $request->setMessage('Please Sign on the pdf.');
+		// $request->addSigner('akash@soureeasy.com', 'akash', 0);
+		// $request->addCC('akash@soureeasy.com');
+		// $request->addFile('../Akash_Resume.pdf');
+		// $request->addMetadata('custom_id', '1234');
+		// $request->addMetadata('custom_text', 'NDA #9');
+		// $response = $client->sendSignatureRequest($request);
+		// dd($response);
 	});
-
-
-	Route::post('/testCallback', function(){
-		// $account = new HelloSign\Account;
-		// $account->setCallbackUrl('http://127.0.0.1:8000/callback');
-		// $response = $client->updateAccount($account);
-		//dd($response);
-		dd("callback");
-	});
-
-	Route::post('/srtemp', function(){
-		$client = new HelloSign\Client('5d787d73dffc85b79b4fdf960fa36751dfa62da2662bdebb95a94854020e953a');
-		$request = new HelloSign\TemplateSignatureRequest;
-		$request->enableTestMode();
-		// $request->setTemplateId('42b20e4ad6452f2cba3d574ce99e5e883ce893d5');
-		$request->setTitle('algo');
-		$request->setSubject('Sign request');
-		$request->setMessage('Please Sign on the pdf.');
-		$request->setSigner('akash', 'akash@sourceeasy.com',0);
-		$request->addFile('../test.pdf');
-		$request->addMetadata('custom_id', 'Content id');
-		$request->addMetadata('custom_text', 'Content Text');
-		// $client_id = '2289998783e6934d615b2673edeaf807';
-		$embedded_request = new HelloSign\EmbeddedSignatureRequest($request, $client_id);
-		$response = $client->createEmbeddedSignatureRequest($embedded_request);
-		dd($response);
-	});
-
-	Route::post('/signrequest',function(){
-		$client = new HelloSign\Client('5d787d73dffc85b79b4fdf960fa36751dfa62da2662bdebb95a94854020e953a');
-		$request = new HelloSign\SignatureRequest;
-		$request->enableTestMode();
-		$request->setTitle('algo');
-		$request->setSubject('Sign request without template');
-		$request->setMessage('Please sign this pdf ');
-		$request->addSigner('akash@sourceeasy.com', 'akash', 0);
-		$request->addSigner(new HelloSign\Signer(array(
-		    'name' => 'Probir Gayen',
-		    'email_address' => 'probir@sourceeasy.com',
-		    'order' => 1
-		)));
-		$request->addCC('akashsharma.cse2016@sourceeasy.com');
-		$request->addFile('../test.pdf');
-		$request->addMetadata('custom_id', '1234');
-		$request->addMetadata('custom_text', 'custom_text');
-		$response = $client->sendSignatureRequest($request);
-		dd($response);
+	Route::post('/callback', function(){
+		return "asdlfjlasjdf";
 	});
