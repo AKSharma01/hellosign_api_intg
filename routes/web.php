@@ -8,31 +8,29 @@
 
 	Route::get('/getPdf', function(){
 		$client = new HelloSign\Client('5d787d73dffc85b79b4fdf960fa36751dfa62da2662bdebb95a94854020e953a');
-		
-		$SignatureRequest = $client->getSignatureRequests();
-		$SignatureRequest = $SignatureRequest->toArray();
-		// for ($i=0; $i < count($SignatureRequest); $i++) { 
-		// 	print_r($SignatureRequest[$i]['signatures']);	
-		// }
-		// dd($SignatureRequest);
-		
-		for ($i=0; $i < sizeof($SignatureRequest); $i++) { 
-			// print_r($SignatureRequest[$i]['signature_request_id']);
-			$client->getFiles($SignatureRequest[$i]['signature_request_id'], storage_path().'/hellosign/'.$SignatureRequest[$i]['title'].'.pdf');
+		try {
+			$SignatureRequest = $client->getSignatureRequests();
+			$SignatureRequest = $SignatureRequest->toArray();
+			for ($i=0; $i < sizeof($SignatureRequest); $i++) { 
+				$client->getFiles($SignatureRequest[$i]['signature_request_id'], storage_path().'/hellosign/'.$SignatureRequest[$i]['title'].'.pdf');
+			}
+			dd($SignatureRequest);
+		} catch (Exception $e) {
+			dd("Failed to get signrequest");
 		}
-		dd('success');
+			
 		
 	});
 
 
 	Route::get('/testCallback', function(){
-		// $account = new HelloSign\Account;
-		// $account->setCallbackUrl('http://127.0.0.1:8000/callback');
-		// $response = $client->updateAccount($account);
+		$account = new HelloSign\Account;
+		$account->setCallbackUrl('http://127.0.0.1:8000/callback');
+		$response = $client->updateAccount($account);
 		dd($response);
 	});
 
-	Route::post('/srtemp', function(){
+	Route::get('/srtemp', function(){
 		$client = new HelloSign\Client('5d787d73dffc85b79b4fdf960fa36751dfa62da2662bdebb95a94854020e953a');
 		$request = new HelloSign\TemplateSignatureRequest;
 		$request->enableTestMode();
@@ -50,7 +48,7 @@
 		dd($response);
 	});
 
-	Route::post('/signrequest',function(){
+	Route::get('/signrequest',function(){
 		$client = new HelloSign\Client('5d787d73dffc85b79b4fdf960fa36751dfa62da2662bdebb95a94854020e953a');
 		$request = new HelloSign\SignatureRequest;
 		$request->enableTestMode();
