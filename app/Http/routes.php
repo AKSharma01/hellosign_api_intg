@@ -1,4 +1,6 @@
 <?php
+	use App\Http\Requests;
+
 	
 
 
@@ -23,11 +25,12 @@
 	});
 
 
-	Route::get('/testCallback', function(){
-		$account = new HelloSign\Account;
-		$account->setCallbackUrl('http://127.0.0.1:8000/callback');
-		$response = $client->updateAccount($account);
-		dd($response);
+	Route::post('/testCallback', function(Request $request){
+	//	$account = new HelloSign\Account;
+	//	$account->setCallbackUrl('http://127.0.0.1:8000/callback');
+	//	$response = $client->updateAccount($account);
+	//	dd($response);
+		dd($request);
 	});
 
 	Route::get('/srtemp', function(){
